@@ -41,20 +41,12 @@ Make sure the `vagrant@your-initials` is in the screenshot
 
 ### PySpark ScreenShot
 
-Place PySpark screenshot here
+<img width="934" alt="Abhinaya_pysc" src="https://github.com/abejugam11/abhinaya521/assets/156279677/a7222d6f-b18e-4d58-b93d-399e474444f8">
 
 ### SBT build Output Screenshot
 
-Place screenshot here
+<img width="787" alt="abhinaya_sbt build" src="https://github.com/abejugam11/abhinaya521/assets/156279677/02bd5d69-f45f-48a5-975c-a817387cab6b">
 
 ### Spark Scala ScreenShot
 
-Place Scala screenshot here
-
-## Deliverables
-
-Using this template, under the `itmd-521` directory in your local repository, create a sub-directory named `labs`. Under that create another subdirectory named `week-03` and place this Readme.md file in that directory along with a folder for images.
-
-You also need to include your python and scala code and the `build.sbt` file. Push the code to your remote GitHub repo and submit the URL to this location in Blackboard.
-
-Do not push any data files into your GitHub repo
+<img width="871" alt="Abhinaya_scala" src="https://github.com/abejugam11/abhinaya521/assets/156279677/0912cc94-37ab-41f6-8b4d-a9aee820ca2f">
