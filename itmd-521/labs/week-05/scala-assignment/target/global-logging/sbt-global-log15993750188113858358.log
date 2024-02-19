@@ -1,0 +1,24 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(~run, Some(c55b8841-4037-41a3-94b1-513df8c6deb5), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(__runWatch console0, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtStashOnFailure, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(__preWatch console0, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/vagrant/assignment_02/target/scala-2.12/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/assignment_02/src/main/scala/assignment_02.scala:50:9: ds is already defined as value ds[0m
+[0m[[0m[31merror[0m] [0m[0m    val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData](Encoders.product[DeviceIoTData])[0m
+[0m[[0m[31merror[0m] [0m[0m        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/assignment_02/src/main/scala/assignment_02.scala:49:43: Unable to find encoder for type DeviceIoTData. An implicit Encoder[DeviceIoTData] is needed to store DeviceIoTData instances in a Dataset. Primitive types (Int, String, etc) and Product types (case classes) are supported by importing spark.implicits._  Support for serializing other types will be added in future releases.[0m
+[0m[[0m[31merror[0m] [0m[0m    val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData][0m
+[0m[[0m[31merror[0m] [0m[0m                                          ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/assignment_02/src/main/scala/assignment_02.scala:50:75: No TypeTag available for DeviceIoTData[0m
+[0m[[0m[31merror[0m] [0m[0m    val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData](Encoders.product[DeviceIoTData])[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                          ^[0m
+[0m[[0m[31merror[0m] [0m[0mthree errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 1 s, completed Feb 15, 2024, 3:30:13 AM[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(resumeFromFailure, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtPopOnFailure, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(__postWatch console0, None, Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(__waitWatch console0, None, Some(CommandSource(console0)))[0m

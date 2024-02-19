@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/assignment_02/src/main/scala/assignment_02.scala:50:9: ds is already defined as value ds[0m
+[0m[[0m[31merror[0m] [0m[0m    val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData](Encoders.product[DeviceIoTData])[0m
+[0m[[0m[31merror[0m] [0m[0m        ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
