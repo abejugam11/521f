@@ -42,27 +42,25 @@ object Main {
         StructField("timestamp", LongType, true)
       )
     )
-    val df = spark.read.json("/home/vagrant/iot_devices.json")
-    //val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData]
-    //val ds: Dataset[DeviceIoTData] = df.as[DeviceIoTData](Encoders.product[DeviceIoTData])
-    //val deviceIoTDataEncoder = Encoders.product[DeviceIoTData]
-    // Load the data into a Dataset of DeviceIoTData
-    //val df: Dataset[DeviceIoTData] = spark.read.schema(deviceIoTDataEncoder.schema).json("/home/vagrant/iotdevices.json").as(deviceIoTDataEncoder)
-    //val df: Dataset[DeviceIoTData] = spark.read.schema(schema).json("/home/vagrant/iotdevices.json").as[DeviceIoTData]
-    //val df = spark.read.json("/home/vagrant/iot_devices.json").as[DeviceIoTData]
-    //println(df)
+    val data_set = spark.read.json("/home/vagrant/iot_devices.json")
+
+
     // 1. Detect failing devices with battery levels below a threshold.
-    val batteryThreshold = 5
-    val failingDevices = df.filter($"battery_level" < batteryThreshold)
-    println("Failing Devices:")
-    failingDevices.show() 
+    val Battery_ThresholdValue = 6
+    val failing_Devices = data_set.filter($"battery_level" <  Battery_ThresholdValue )
+    println("Failing Devices with battery levels below a threshold:")
+    failing_Devices.show()
+
+
+    // 2. Identify offending countries with high levels of CO2 emissions.
+    val Threshold_CO2 = 1000
+    val offending_Countries = data_set.filter($"c02_level" > Threshold_CO2 ).select("cn").distinct()
+    println("Offending Countries with high levels of CO2 emissions.:")
+    offending_Countries.show()
 
 
 
-
- 
 
     spark.stop()
   }
 }
-
