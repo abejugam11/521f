@@ -72,6 +72,12 @@ object Main {
     Maximum_Minimum_Humidity.show()
 
 
+    // 4. Sort and group by average temperature, CO2, humidity, and country
+    val Avg_Metrics= data_set.groupBy("cn").agg(avg("temp").alias("Average_temparature"),avg("c02_level").alias("Average_CO2_Level"),avg("humidity").alias("Average_humidity")).sort("Average_temparature", "Average_CO2_Level", "Average_humidity")
+    println("Average Metrics by Country:")
+    Avg_Metrics.show()
+
+
 
     spark.stop()
   }
