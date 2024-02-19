@@ -60,6 +60,18 @@ object Main {
 
 
 
+    // 3. Compute the min and max values for temperature, battery level, CO2, and humidity.
+    val Maximum_Minimum_Temperature = data_set.agg(min("temp"), max("temp"))
+    val Maximum_Minimum_BatteryLevel = data_set.agg(min("battery_level"), max("battery_level"))
+    val Maximum_Minimum_CO2_Level = data_set.agg(min("c02_level"), max("c02_level"))
+    val Maximum_Minimum_Humidity = data_set.agg(min("humidity"), max("humidity"))
+    println("Maximum and Minimum Values  for temperature, battery level, CO2, and humidity.:")
+    Maximum_Minimum_Temperature.show()
+    Maximum_Minimum_BatteryLevel.show()
+    Maximum_Minimum_CO2_Level.show()
+    Maximum_Minimum_Humidity.show()
+
+
 
     spark.stop()
   }
