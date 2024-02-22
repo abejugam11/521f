@@ -55,4 +55,16 @@ Create a sub-folder under `labs` named: `week-05` under the `itmd-521` folder. P
 Submit to Blackboard the URL to the folder in your GitHub repo. I will clone your code and run it to test the functionality. I don't need the datasets as I will have them already.
 
 Due at the **Start of class** Section 05 February 14th 1:50 PM CST
+
 Due at the **Start of class** Section 01,02,03 February 15th 3:05 PM CST
+
+
+![scala code](<scalacode.png>)
+![scala output question1](<scala1.png>)
+![scala output question2](<scala2.png>)
+![scala output question3_1](<scala3_1.png>)
+![scala output question3_2](<scala3_2.png>)
+![scala output question3_3](<scala3_4.png>)
+![scala output question3_4](<scala3_4.png>)
+![scala output question4](<scala4.png>)
+
