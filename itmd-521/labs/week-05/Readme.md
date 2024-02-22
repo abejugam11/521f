@@ -65,3 +65,13 @@ Due at the **Start of class** Section 01,02,03 February 15th 3:05 PM CST
 ![scala output question3](<scala3.png>)
 ![scala output question4](<scala4.png>)
 
+
+![python queston 1](py1.png)
+![python question 2](py2.png)
+![python question 3](py3.png)
+![python question 4](py4.png)
+![python question 5](py5.png)
+![python question 6](py6.png)
+![pyhton question 7](py7.png)
+![python part-1](<py_code1.png>)
+![python part-2](<py_code2.png>)
