@@ -1,12 +1,11 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import weekofyear, year,col
+from pyspark.sql.window import Window
+from pyspark.sql.types import DateType
 from pyspark.ml.feature import StringIndexer
-from pyspark.sql.functions import to_date
+from pyspark.sql.functions import month, year, count, col, when,weekofyear,avg , to_date
 
-# Create a Spark session
+
 spark = SparkSession.builder.appName("assignment_02").getOrCreate()
-
-# Read the dataset
 data_set = spark.read.csv("sf-fire-calls.csv", header=True)
 
 #What were all the different types of fire calls in 2018?
@@ -17,3 +16,46 @@ distinct_fire_call_types = fire_calls_2018.select('CallType').distinct()
 print('The Distinct Fire Calls in 2018 are :')
 distinct_fire_call_types.show(truncate=False)
 
+
+
+#What months within the year 2018 saw the highest number of fire calls?
+
+Highest_fireCalls_2018=data_set.filter(year("CallDate") == 2018)
+Highest_fireCalls_2018.groupBy(month("CallDate").alias("Month")).agg(count("*").alias("Total_FireCalls")).orderBy(col("Total_FireCalls").desc()).show(10)
+
+
+#Which neighborhood in San Francisco generated the most fire calls in 2018?
+
+Neighbour_Sanfrancisco_fireCalls=data_set.filter((year("CallDate") == 2018) & (col("City") == "SF"))
+Neighbour_Sanfrancisco_fireCalls.groupBy("Neighborhood").agg(count("*").alias("Total_FireCalls")).orderBy(col("Total_FireCalls").desc()).show(10)
+
+
+#Which neighborhoods had the worst response times to fire calls in 2018
+
+data_set_worstResponseTime = data_set.filter(year("CallDate") ==2018).withColumn("ResponseTime",col("Delay"))
+data_set_worstResponseTime.groupBy("Neighborhood").agg(avg("ResponseTime").alias("AvgResponseTime")).orderBy(col("AvgResponseTime").desc()).show(10, False)
+
+
+
+#Which week in the year in 2018 had the most fire calls?
+
+data_set_WeekFireCalls = data_set.filter(year("CallDate") == 2018)
+data_set_WeekFireCalls.groupBy(weekofyear("CallDate").alias("Week")).count().orderBy(col("count").desc()).withColumnRenamed("count", "Total_FireCalls").show(10, False)
+
+
+#Is there a correlation between neighborhood, zip code, and number of fire calls
+
+data_set_correlation = data_set.groupBy("Neighborhood", "Zipcode").agg(count("*").alias("Total_FireCalls")).orderBy(col("Total_FireCalls").desc())
+data_set_correlation.show(10)
+
+#How can we use Parquet files or SQL tables to store this data and read it back?
+
+data_set.write.parquet("fire_calls_data.parquet", mode="overwrite")
+parquet_Dataset = spark.read.parquet("fire_calls_data.parquet")
+parquet_Dataset.show(10)
+
+data_set.createOrReplaceTempView("fire_calls_table")
+data_set_SQL = spark.sql("SELECT * FROM fire_calls_table WHERE year(CallDateTS) = 2018")
+data_set_SQL.show(10)
+
+spark.stop()
