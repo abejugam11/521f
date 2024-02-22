@@ -62,9 +62,6 @@ Due at the **Start of class** Section 01,02,03 February 15th 3:05 PM CST
 ![scala code](<scalacode.png>)
 ![scala output question1](<scala1.png>)
 ![scala output question2](<scala2.png>)
-![scala output question3_1](<scala3_1.png>)
-![scala output question3_2](<scala3_2.png>)
-![scala output question3_3](<scala3_4.png>)
-![scala output question3_4](<scala3_4.png>)
+![scala output question3](<scala3_1.png>)
 ![scala output question4](<scala4.png>)
 
