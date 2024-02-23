@@ -73,5 +73,5 @@ Due at the **Start of class** Section 01,02,03 February 15th 3:05 PM CST
 ![python question 5](py5.png)
 ![python question 6](py6.png)
 ![pyhton question 7](py7.png)
-![python part-1](<py_code1.png>)
-![python part-2](<py_code2.png>)
+![python part-1](<pycode1.png>)
+![python part-2](<pycode2.png>)
