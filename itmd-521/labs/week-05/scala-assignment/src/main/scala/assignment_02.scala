@@ -20,6 +20,15 @@ case class DeviceIoTData(
   )
 object Main {
   def main(args: Array[String]): Unit = {
+
+    if (args.length != 1) {
+      println("Usage: sbt run <inputFilePath>")
+      sys.exit(1)
+    }
+
+    val inputFilePath = args(0)
+
+
     val spark = SparkSession.builder.appName("assignment_02").config("spark.master", "local").getOrCreate()
     import spark.implicits._
 
@@ -42,7 +51,7 @@ object Main {
         StructField("timestamp", LongType, true)
       )
     )
-    val data_set = spark.read.json("/home/vagrant/iot_devices.json")
+    val data_set = spark.read.json(inputFilePath)
 
 
     // 1. Detect failing devices with battery levels below a threshold.
