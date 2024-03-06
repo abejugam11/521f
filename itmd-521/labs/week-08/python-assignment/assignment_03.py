@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
+import sys
 
 if __name__ == "__main__":
     # Initialize Spark session
@@ -7,8 +8,8 @@ if __name__ == "__main__":
 
     try:
         # Hardcoded file path (for testing purposes)
-        input_path = "departuredelays.csv"
-
+        #input_path = "../departuredelays.csv"
+        input_path=sys.argv[1]
         # Read data from the hardcoded path
         flights_df = spark.read.csv(input_path, header=True, inferSchema=True)
 
