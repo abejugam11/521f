@@ -4,23 +4,29 @@ import org.apache.spark.sql.functions._
 object Assignment03 {
   def main(args: Array[String]): Unit = {
     // Initialize Spark session
-    val spark = SparkSession.builder.appName("Assignment03").master("local").getOrCreate()
+    val spark = SparkSession.builder.appName("Assignment03").getOrCreate()
 
     try {
-      // Hardcoded file path (for testing purposes)
-      val inputPath = "../departuredelays.csv"
-      //val inputPath = args(0)
-
-      // Read data from the hardcoded path
-      val flightsDF = spark.read.csv(inputPath).toDF("distance", "origin", "destination", "date", "delay")
+      // Assuming `us_delay_flights_tbl` is a registered table
+      // You can register it using: flightsDF.createOrReplaceTempView("us_delay_flights_tbl")
 
       // Query 1
-      val resultQuery1 = flightsDF.filter(col("distance") > 1000).select("distance", "origin", "destination").orderBy(desc("distance")).limit(10)
+      val resultQuery1 = spark.sql(
+        """SELECT distance, origin, destination 
+          |FROM us_delay_flights_tbl 
+          |WHERE distance > 1000 
+          |ORDER BY distance DESC
+          |LIMIT 10""".stripMargin)
       println("Query 1 Result:")
       resultQuery1.show()
 
       // Query 2
-      val resultQuery2 = flightsDF.filter((col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD")).select("date", "delay", "origin", "destination").orderBy(desc("delay")).limit(10)
+      val resultQuery2 = spark.sql(
+        """SELECT date, delay, origin, destination 
+          |FROM us_delay_flights_tbl 
+          |WHERE delay > 120 AND ORIGIN = 'SFO' AND DESTINATION = 'ORD' 
+          |ORDER by delay DESC
+          |LIMIT 10""".stripMargin)
       println("Query 2 Result:")
       resultQuery2.show()
 
