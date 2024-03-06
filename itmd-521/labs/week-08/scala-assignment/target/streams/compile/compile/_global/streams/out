@@ -1,0 +1,10 @@
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/abhinaya521/itmd-521/labs/week-08/scala-assignment/assignment_03.scala:1:12: object apache is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.spark.sql.{SparkSession, DataFrame}[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/abhinaya521/itmd-521/labs/week-08/scala-assignment/assignment_03.scala:2:12: object apache is not a member of package org[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.spark.sql.functions._[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/vagrant/abhinaya521/itmd-521/labs/week-08/scala-assignment/assignment_03.scala:13:17: not found: value SparkSession[0m
+[0m[[0m[31merror[0m] [0m[0m    val spark = SparkSession.builder.appName("Assignment03").getOrCreate()[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0mthree errors found[0m
