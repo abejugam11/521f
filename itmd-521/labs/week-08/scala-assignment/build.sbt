@@ -1,4 +1,5 @@
 name := "assignment_03"
+name := "assignment_03test"
 
 version := "1.0"
 
