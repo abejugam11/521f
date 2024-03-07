@@ -1,45 +1,41 @@
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, DataFrame}
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType}
+import org.apache.spark.sql.types._
 
 object Assignment03 {
   def main(args: Array[String]): Unit = {
     // Create a Spark session
-    val spark = SparkSession.builder.appName("Assignment03").getOrCreate()
+    val spark = SparkSession.builder
+      .appName("Assignment03")
+      .config("spark.master", "local[*]")
+      .getOrCreate()
 
     try {
-      // Part 2: Filtering and Catalog
-      val inputPath = args(0)
-      val usDelayFlightsSchema = new StructType()
-        .add(StructField("date", StringType, true))
-        .add(StructField("delay", IntegerType, true))
-        .add(StructField("distance", IntegerType, true))
-        .add(StructField("origin", StringType, true))
-        .add(StructField("destination", StringType, true))
+      // Part 3: Writing to Different Formats
+      val inputPath = args(0)  // Assuming the input path is passed as a command-line argument
 
-      val usDelayFlightsDF = spark.read
-        .format("csv")
-        .option("header", "true")
-        .schema(usDelayFlightsSchema)
-        .load(inputPath)
-
-      usDelayFlightsDF.createOrReplaceTempView("us_delay_flights_tbl")
-
-      val chicagoFlightsDF = usDelayFlightsDF
-        .filter(
-          col("origin") === "ORD" &&
-          substring(col("date"), 1, 2) === "03" &&
-          substring(col("date"), 3, 2).between("01", "15")
+      val departuredelaysSchema = StructType(
+        List(
+          StructField("date", StringType, true),
+          StructField("delay", IntegerType, true),
+          StructField("distance", IntegerType, true),
+          StructField("origin", StringType, true),
+          StructField("destination", StringType, true)
         )
+      )
 
-      chicagoFlightsDF.show(5)
+      val departuredelaysDF: DataFrame = spark.read
+        .schema(departuredelaysSchema)
+        .csv(inputPath)
 
-      val catalogColumns = spark.catalog.listColumns("us_delay_flights_tbl")
-      val columnNames = catalogColumns.map(_.name)
+      // Write the content out as a JSON file
+      departuredelaysDF.write.mode("overwrite").json("departuredelays.json")
 
-      println("Columns of us_delay_flights_tbl:")
-      columnNames.foreach(println)
+      // Write the content out as a compressed JSON file using lz4
+      departuredelaysDF.write.mode("overwrite").option("compression", "lz4").json("departuredelays_lz4.json")
 
+      // Write the content out as a Parquet file
+      departuredelaysDF.write.mode("overwrite").parquet("departuredelays.parquet")
     } catch {
       case e: Exception => println(s"An error occurred: $e")
     } finally {
