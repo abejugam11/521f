@@ -1,11 +1,15 @@
 import org.apache.spark.sql.{SparkSession, DataFrame}
 import org.apache.spark.sql.functions.{col, substring, to_timestamp, date_format}
+//import org.apache.spark.sql.SparkSession.implicits._
 
 object Assignment03 {
   def main(args: Array[String]): Unit = {
-    try {
+
+     val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
+     import spark.implicits._
+     try {
       // Create a Spark session
-      val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
+      //val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
 
       // Part 1: Reading and Querying CSV
       val inputPath = args(0)
