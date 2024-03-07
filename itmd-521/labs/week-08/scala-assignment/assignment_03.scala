@@ -8,9 +8,9 @@ object Assignment03 {
     val spark = SparkSession.builder
       .appName("Assignment03")
       .config("spark.master", "local[*]")  // Use "local[*]" for local mode
-      .config("spark.sql.catalogImplementation", "hive")
       .getOrCreate()
 
+     import spark.implicits._
     try {
       // Part 1: Reading and Querying CSV
       val inputPath = args(0)
