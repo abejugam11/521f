@@ -1,15 +1,12 @@
 import org.apache.spark.sql.{SparkSession, DataFrame}
 import org.apache.spark.sql.functions.{col, substring, to_timestamp, date_format}
-//import org.apache.spark.sql.SparkSession.implicits._
 
 object Assignment03 {
   def main(args: Array[String]): Unit = {
-
-     val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
-     import spark.implicits._
-     try {
+    try {
       // Create a Spark session
-      //val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
+      val spark = SparkSession.builder.appName("Assignment03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
+      import spark.implicits._
 
       // Part 1: Reading and Querying CSV
       val inputPath = args(0)
@@ -38,24 +35,7 @@ object Assignment03 {
       val columnNames = catalogColumns.map(_.name)
 
       println("Columns of us_delay_flights_tbl:")
-      columnNames.foreach(println)
-
-      // Part 3: Writing to Different Formats
-      val departureDelaysDF = spark.read.option("header", "true").schema(schema).csv(inputPath)
-      departureDelaysDF.write.mode("overwrite").json("departuredelays.json")
-      departureDelaysDF.write.mode("overwrite").option("compression", "lz4").json("departuredelays_lz4.json")
-      departureDelaysDF.write.mode("overwrite").parquet("departuredelays.parquet")
-
-      // Part 4: Filtering and Writing ORD Records
-      val ordDeparturesDF = spark.read.parquet("departuredelays.parquet")
-        .withColumn("date", to_timestamp(col("date"), "MMddHHmm"))
-        .withColumn("formatted_date", date_format(col("date"), "MM-dd hh:mm a"))
-
-      val filteredORDDeparturesDF = ordDeparturesDF.filter(col("origin") === "ORD")
-      filteredORDDeparturesDF.write.mode("overwrite").parquet("orddeparturedelays.parquet")
-
-      println("ORD Departures:")
-      filteredORDDeparturesDF.select("formatted_date", "delay", "distance", "origin", "destination").show(10, truncate = false)
+      columnNames.foreach(columnName => println(columnName))
 
     } catch {
       case e: Exception => println(s"An error occurred: ${e.getMessage}")
