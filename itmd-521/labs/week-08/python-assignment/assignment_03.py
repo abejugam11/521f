@@ -1,11 +1,11 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType
+from pyspark.sql.types import StructType, TimestampType,StructField, StringType, IntegerType, DateType
 try:
     # Create a Spark session
     spark = SparkSession.builder.appName("ORDDepartureDelays").getOrCreate()
-    
+
     schema = StructType([
-        StructField("date", DateType(), True),
+        StructField("date",  StringType(), True),
         StructField("delay", IntegerType(), True),
         StructField("distance", IntegerType(), True),
         StructField("origin", StringType(), True),
@@ -21,7 +21,7 @@ try:
 
     departuredelays_df1.write.mode("overwrite").parquet("departuredelays.parquet")
     # Read the Parquet file into a DataFrame
-    departuredelays_df = spark.read.parquet("departuredelays.parquet")
+    departuredelays_df = spark.read.parquet("departuredelays.parquet").select(*schema.fieldNames())
 
     # Select all records with ORD as the origin
     ord_departures_df = departuredelays_df.filter(departuredelays_df["origin"] == "ORD")
