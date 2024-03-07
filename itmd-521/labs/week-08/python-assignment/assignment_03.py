@@ -3,11 +3,11 @@ from pyspark.sql.functions import col, substring
 
 try:
     # Create a Spark session
-    spark = SparkSession.builder.appName("FlightAnalysis").config("spark.sql.catalogImplementation", "hive").getOrCreate()
+    spark = SparkSession.builder.appName("assignment_03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
 
     # Read the CSV file into a DataFrame with the appropriate schema
     us_delay_flights_df = spark.read.csv(
-        "departuredelays.csv",
+        "../departuredelays.csv",
         header=True,
         schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
     )
