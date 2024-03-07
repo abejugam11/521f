@@ -3,22 +3,13 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 
 try:
     # Create a Spark session
-    spark = SparkSession.builder.appName("FlightDataProcessing").getOrCreate()
+    spark = SparkSession.builder.appName("assignment_03").config("spark.sql.catalogImplementation", "hive").getOrCreate()
 
-    # Define the schema for the DataFrame
-    schema = StructType([
-        StructField("date", DateType(), True),
-        StructField("delay", IntegerType(), True),
-        StructField("distance", IntegerType(), True),
-        StructField("origin", StringType(), True),
-        StructField("destination", StringType(), True),
-    ])
-
-    # Read the CSV file into a DataFrame with the specified schema
+    # Read the CSV file into a DataFrame with the appropriate schema
     departuredelays_df = spark.read.csv(
-        "../departuredelays.csv",
+        "departuredelays.csv",
         header=True,
-        schema=schema
+        schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
     )
 
     # Write the content out as a JSON file
