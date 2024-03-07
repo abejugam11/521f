@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, substring, to_timestamp
+from pyspark.sql.functions import col, substring, to_timestamp,date_format
 import sys
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType, TimestampType
 
@@ -50,12 +50,40 @@ try:
     departuredelays_df.write.mode("overwrite").parquet("departuredelays.parquet")
 
     # Part 4: Filtering and Writing ORD Records
+
+    #departuredelays_df = departuredelays_df.withColumn("date", to_timestamp(col("date"), "MMddHHmm"))
+
+    #ord_departures_df = departuredelays_df.filter(departuredelays_df["origin"] == "ORD")
+
+    # Extract month, day, and time for display without the year
+    #ord_departures_df = ord_departures_df.withColumn("month_day", substring(col("date"), 1, 3))
+    #ord_departures_df = ord_departures_df.withColumn("time", substring(col("date"), 6, 4))
+
+    # Drop the original date column
+    #ord_departures_df = ord_departures_df.drop("date")
+
+    # Reorder columns for better display
+    #ord_departures_df = ord_departures_df.select("month_day", "time", "delay", "distance", "origin", "destination")
+
+    #ord_departures_df.write.mode("overwrite").parquet("orddeparturedelays.parquet")
+    #ord_departures_df.show(10, truncate=False)
     departuredelays_df = spark.read.parquet("departuredelays.parquet")
+
+    # Convert the "date" column to a timestamp
     departuredelays_df = departuredelays_df.withColumn("date", to_timestamp(col("date"), "MMddHHmm"))
 
+    # Format the timestamp to "MM-dd hh:mm a"
+    departuredelays_df = departuredelays_df.withColumn("formatted_date", date_format(col("date"), "MM-dd hh:mm a" ))
+
+    # Select all records with ORD as the origin
     ord_departures_df = departuredelays_df.filter(departuredelays_df["origin"] == "ORD")
+
+    # Write the results to a DataFrameWriter named orddeparturedelays in Parquet format
     ord_departures_df.write.mode("overwrite").parquet("orddeparturedelays.parquet")
-    ord_departures_df.show(10)
+
+    # Show the first 10 lines of the DataFrame
+    ord_departures_df.select("formatted_date", "delay", "distance", "origin", "destination").show(10, truncate=False)
+
 
 except Exception as e:
     print(f"An error occurred: {e}")
