@@ -1,4 +1,4 @@
-import org.apache.spark.sql.{SparkSession, DataFrame}
+import org.apache.spark.sql.{SparkSession, functions}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 
@@ -7,35 +7,22 @@ object Assignment03 {
     // Create a Spark session
     val spark = SparkSession.builder
       .appName("Assignment03")
-      .config("spark.master", "local[*]")
+      .config("spark.sql.catalogImplementation", "hive")
       .getOrCreate()
 
     try {
-      // Part 3: Writing to Different Formats
-      val inputPath = args(0)  // Assuming the input path is passed as a command-line argument
+      // Part 4: Filtering and Writing ORD Records
+      val departuredelays_df = spark.read.parquet("departuredelays.parquet")
 
-      val departuredelaysSchema = StructType(
-        List(
-          StructField("date", StringType, true),
-          StructField("delay", IntegerType, true),
-          StructField("distance", IntegerType, true),
-          StructField("origin", StringType, true),
-          StructField("destination", StringType, true)
-        )
-      )
+      val formatted_df = departuredelays_df
+        .withColumn("date", to_timestamp(col("date"), "MMddHHmm"))
+        .withColumn("formatted_date", date_format(col("date"), "MM-dd hh:mm a"))
 
-      val departuredelaysDF: DataFrame = spark.read
-        .schema(departuredelaysSchema)
-        .csv(inputPath)
+      val ord_departures_df = formatted_df.filter(col("origin") === "ORD")
 
-      // Write the content out as a JSON file
-      departuredelaysDF.write.mode("overwrite").json("departuredelays.json")
+      ord_departures_df.write.mode("overwrite").parquet("orddeparturedelays.parquet")
 
-      // Write the content out as a compressed JSON file using lz4
-      departuredelaysDF.write.mode("overwrite").option("compression", "lz4").json("departuredelays_lz4.json")
-
-      // Write the content out as a Parquet file
-      departuredelaysDF.write.mode("overwrite").parquet("departuredelays.parquet")
+      ord_departures_df.select("formatted_date", "delay", "distance", "origin", "destination").show(10, truncate = false)
     } catch {
       case e: Exception => println(s"An error occurred: $e")
     } finally {
