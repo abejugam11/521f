@@ -5,7 +5,7 @@ from pyspark.sql.functions import col, when, count
 
 spark = SparkSession.builder.appName("Assignment01").getOrCreate()
 
-csv_file_path = "/home/vagrant/jhajek/itmd-521/labs/week-04/scala/data/Divvy_Trips_2015-Q1.csv"
+csv_file_path = "../Divvy_Trips_2015-Q1.csv"
 
 
 data_set = spark.read.option("header", "true").csv(csv_file_path)

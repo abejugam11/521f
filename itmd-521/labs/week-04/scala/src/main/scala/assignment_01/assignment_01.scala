@@ -1,13 +1,13 @@
-package main.scala.assignment01
+//package main.scala.assignment01
 import org.apache.spark.sql.{SparkSession, DataFrame}
 import org.apache.spark.sql.types._
 
 object Assignment01 {
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder.appName("Assignment01").getOrCreate()
+    val spark = SparkSession.builder.appName("Assignment01").config("spark.master", "local").getOrCreate()
 
-    val csvFilePath = "/home/vagrant/jhajek/itmd-521/labs/week-04/scala/data/Divvy_Trips_2015-Q1.csv"
+    val csvFilePath = "../Divvy_Trips_2015-Q1.csv"
 
     val data_set1 = spark.read.option("header", "true").csv(csvFilePath)
     println("DataFrame 1:")
@@ -37,6 +37,8 @@ object Assignment01 {
     println("\nDataFrame 3:")
     data_set3.printSchema()
     println("Record Count: " + data_set3.count())
+
+    
 
     val Filtered_data_set = data_set3.select("gender", "from_station_name").filter((data_set3("from_station_name").between("A", "K") && data_set3("gender") === "Female") || (data_set3("from_station_name").between("L", "Z") && data_set3("gender") === "Male"))
     val groupedDF = Filtered_data_set.groupBy("from_station_name").count()
