@@ -41,12 +41,14 @@ Make sure the `vagrant@your-initials` is in the screenshot
 
 ### PySpark ScreenShot
 
-<img width="934" alt="Abhinaya_pysc" src="https://github.com/abejugam11/abhinaya521/assets/156279677/a7222d6f-b18e-4d58-b93d-399e474444f8">
+![pyspark](<pyspark.png>)
 
 ### SBT build Output Screenshot
 
-<img width="787" alt="abhinaya_sbt build" src="https://github.com/abejugam11/abhinaya521/assets/156279677/02bd5d69-f45f-48a5-975c-a817387cab6b">
+![sbt](<sbt.png>)
 
 ### Spark Scala ScreenShot
 
-<img width="871" alt="Abhinaya_scala" src="https://github.com/abejugam11/abhinaya521/assets/156279677/0912cc94-37ab-41f6-8b4d-a9aee820ca2f">
+![scala](<scala.png>)
+
+

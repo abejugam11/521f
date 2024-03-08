@@ -1,17 +1,14 @@
-// scalastyle:off println
-
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
-/**
-  * Usage: MnMcount <mnm_file_dataset>
-  */
+
 object MnMcount {
   def main(args: Array[String]) {
     val spark = SparkSession
       .builder
       .appName("MnMCount")
+      .config("spark.master", "local")
       .getOrCreate()
 
     if (args.length < 1) {
@@ -36,7 +33,7 @@ object MnMcount {
         .orderBy(desc("sum(Count)"))
 
     // show all the resulting aggregation for all the dates and colors
-    countMnMDF.show(60)
+    countMnMDF.show(10)
     println(s"Total Rows = ${countMnMDF.count()}")
     println()
 
