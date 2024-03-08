@@ -38,6 +38,8 @@ Using the `departuredelays.csv` file, in a single file called `assignment_03.py`
 - The code must run and show the desired results
 
 ### Part I - Screenshot
+![scala image](<part1_scala1.png>)
+![scala image](<part1_scala2.png>)
 
 Place required screenshot
 
@@ -53,6 +55,11 @@ Place required screenshot
 
 ### Part II - Screenshot
 
+
+![scala image](<part2_scala.png>)
+
+![scala image](<part2_scala2.png>)
+
 Place screenshot here
 
 ## Assignment Details - Part III
@@ -66,6 +73,13 @@ Read the file into a DataFrame, and apply the appropriate schema (ie first colum
 * As a Parquet file
 
 For all files use `mode` as `overwrite` so that I can run your program and your work will overwrite any previous work. Keep the filename the same, `departuredelays`.
+### Part III - Screenshot
+
+Place screenshot here
+
+
+![python image](<part3_py.png>)
+![scala image](<part3_scala.png>)
 
 ## Assignment Details - Part IV
 
@@ -77,6 +91,8 @@ Using the `departuredelays` parquet file you created part III, read the content 
 ### Part IV - Screenshot
 
 Place screenshot here
+
+![scala image](<part4_scala.png>)
 
 ### Deliverable
 
