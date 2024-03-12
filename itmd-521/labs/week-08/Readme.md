@@ -64,7 +64,7 @@ Place required screenshot
 ### Part II - Screenshot
 
 
-![py image](<py_part3.jpg>)
+![py image](<py part3.jpg>)
 ![scala image](<part2_scala.png>)
 
 ![scala image](<part2_scala2.png>)
