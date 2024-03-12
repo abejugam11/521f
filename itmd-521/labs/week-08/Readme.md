@@ -38,6 +38,14 @@ Using the `departuredelays.csv` file, in a single file called `assignment_03.py`
 - The code must run and show the desired results
 
 ### Part I - Screenshot
+![python code image](<py code_part1.png>)
+
+![py image](<py_part1_1.jpg>)
+
+![py image](<py_part1_2.jpg>)
+
+![scala image](<scala code_part1.png>)
+
 ![scala image](<part1_scala1.png>)
 ![scala image](<part1_scala2.png>)
 
@@ -56,6 +64,7 @@ Place required screenshot
 ### Part II - Screenshot
 
 
+![py image](<py_part3.jpg>)
 ![scala image](<part2_scala.png>)
 
 ![scala image](<part2_scala2.png>)
@@ -78,6 +87,7 @@ For all files use `mode` as `overwrite` so that I can run your program and your 
 Place screenshot here
 
 
+
 ![python image](<part3_py.png>)
 ![scala image](<part3_scala.png>)
 
@@ -93,6 +103,8 @@ Using the `departuredelays` parquet file you created part III, read the content 
 Place screenshot here
 
 ![scala image](<part4_scala.png>)
+
+![py image](<py_part4.jpg>)
 
 ### Deliverable
 
