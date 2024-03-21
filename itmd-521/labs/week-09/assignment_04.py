@@ -44,6 +44,12 @@ left_senior_engineers_df.write.format("jdbc") \
 spark.sql("CREATE OR REPLACE TEMPORARY VIEW left_tempview AS SELECT * FROM left_senior_engineers")
 spark.sql("CREATE OR REPLACE TEMPORARY VIEW left_df AS SELECT * FROM left_senior_engineers")
 
+
+
+# Query the temporary view
+result = spark.sql("SELECT * FROM left_tempview")
+result.show(10)
+
 # Write DataFrame to the database, setting mode type to 'errorifexists' to generate an error
 try:
     left_senior_engineers_df.write.format("jdbc") \
