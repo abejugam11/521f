@@ -54,7 +54,7 @@ You will make extensive use of the textbook and these documentation pages -- **a
 
 ## Screenshots
 ![Image](<2.1.png>)
-![image](<2.2.png>)
+![image](<2.2_1.png>)
 
 
 ## Assignment Details - Part III
