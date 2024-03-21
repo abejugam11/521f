@@ -8,10 +8,10 @@ spark = SparkSession.builder \
 
 # Read the employees table into a DataFrame
 employees_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/your_database") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
     .option("dbtable", "employees") \
-    .option("user", "your_username") \
-    .option("password", "your_password") \
+    .option("user", "root") \
+    .option("password", "root") \
     .load()
 
 # Display the count of the number of records in the DF
@@ -22,18 +22,18 @@ employees_df.printSchema()
 
 # Create a DataFrame of the top 10,000 employee salaries (sort DESC) from the salaries table
 salaries_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/your_database") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
     .option("dbtable", "(SELECT * FROM salaries ORDER BY salary DESC LIMIT 10000) as top_salaries") \
-    .option("user", "your_username") \
-    .option("password", "your_password") \
+    .option("user", "root") \
+    .option("password", "root") \
     .load()
 
 # Write the DataFrame back to database to a new table called: aces
 salaries_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/your_database") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
     .option("dbtable", "aces") \
-    .option("user", "your_username") \
-    .option("password", "your_password") \
+    .option("user", "root") \
+    .option("password", "root") \
     .mode("overwrite") \
     .save()
 
