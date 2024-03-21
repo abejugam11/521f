@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import desc
+from pyspark.sql.functions import desc,col, when, current_date
+
 
 # Create a SparkSession
 spark = SparkSession.builder \
@@ -65,12 +66,12 @@ print("Number of current senior engineers:", current_count)
 senior_engineers_left_df = senior_engineers_df.filter(col("status") == "left")
 senior_engineers_left_df.createOrReplaceTempView("senior_engineers_left")
 
-# Write DataFrame, DataFrame tempView, and DataFrame to the database
 senior_engineers_left_df.write.format("jdbc") \
     .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
-    .option("dbtable", "left_table") \
+    .option("dbtable", "left_table_unmanaged") \
     .option("user", "root") \
     .option("password", "root") \
+    .option("path", "../left_table_unmanaged") \
     .mode("overwrite") \
     .save()
 
