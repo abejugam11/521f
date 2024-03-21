@@ -84,6 +84,10 @@ MariaDB [employees]> describe employees;
 6 rows in set (0.009 sec)
 ```
 
+## Screenshots
+![Image](<3.1.png>)
+![image](<3.2.png>)
+
 ## Final notes
 
 Run the application with the command: `spark-submit --jars ~/spark/jars/mysql-connector-java-8.3.0.jar assignment_04.py ....`. You can assume that I have the database and tables already loaded when I run your code.
