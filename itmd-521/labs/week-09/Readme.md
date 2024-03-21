@@ -88,6 +88,8 @@ MariaDB [employees]> describe employees;
 ![Image](<3.1.png>)
 ![image](<3.2.png>)
 
+The left_df and left_tempview are created and stored pyspark aplication and never written to the database. These are temporary ways to store data.Only the left_table_managed is written to the mysql server through JDBC and you can see that table in the above attached screenshot.
+
 ## Final notes
 
 Run the application with the command: `spark-submit --jars ~/spark/jars/mysql-connector-java-8.3.0.jar assignment_04.py ....`. You can assume that I have the database and tables already loaded when I run your code.
