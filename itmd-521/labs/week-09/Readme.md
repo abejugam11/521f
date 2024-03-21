@@ -88,7 +88,9 @@ MariaDB [employees]> describe employees;
 ![Image](<3.1.png>)
 ![image](<3.2.png>)
 
-The left_df and left_tempview are created and stored pyspark aplication and never written to the database. These are temporary ways to store data.Only the left_table_managed is written to the mysql server through JDBC and you can see that table in the above attached screenshot.
+The left_df and left_tempview are created and stored in pyspark aplication and never written to the database . These are temporary ways to store data .Only the left_table_managed is written to the mysql server through JDBC and you can see that table in the above attached screenshot.
+
+TempViews and Dataframes are local to the pyspark application and dynamic() when we run the pyspark code  
 
 ## Final notes
 
