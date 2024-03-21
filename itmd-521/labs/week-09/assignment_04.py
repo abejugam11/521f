@@ -63,6 +63,8 @@ print("Number of current senior engineers:", current_count)
 
 # Create a PySpark SQL table of senior engineers who have left the company
 senior_engineers_left_df = senior_engineers_df.filter(col("status") == "left")
+
+# Create PySpark SQL tempView of senior engineers who have left the company
 senior_engineers_left_df.createOrReplaceTempView("senior_engineers_left")
 
 senior_engineers_left_df.write.format("jdbc") \
@@ -70,25 +72,19 @@ senior_engineers_left_df.write.format("jdbc") \
     .option("dbtable", "left_table_unmanaged") \
     .option("user", "root") \
     .option("password", "root") \
-    .option("path", "../left_table_unmanaged") \
     .mode("overwrite") \
     .save()
 
 senior_engineers_left_df.createOrReplaceTempView("left_tempview")
 
-senior_engineers_left_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
-    .option("dbtable", "left_df") \
-    .option("user", "root") \
-    .option("password", "root") \
-    .mode("overwrite") \
-    .save()
+# Create PySpark DataFrame of senior engineers who have left the company
+left_df = senior_engineers_left_df
 
 # Error if table already exists
 try:
     senior_engineers_left_df.write.format("jdbc") \
         .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
-        .option("dbtable", "left_table") \
+        .option("dbtable", "left_table_unmanaged") \
         .option("user", "root") \
         .option("password", "root") \
         .mode("errorifexists") \
