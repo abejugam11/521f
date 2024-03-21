@@ -42,5 +42,60 @@ salaries_df.write \
     .option("compression", "snappy") \
     .csv("output_folder")
 
+# Read data from the titles table where title is 'Senior Engineer'
+titles_df = spark.read.format("jdbc") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("user", "root") \
+    .option("password", "root") \
+    .option("query", "SELECT * FROM titles WHERE title = 'Senior Engineer'") \
+    .load()
+
+# Add temp column to identify if the senior engineer is current or has left
+senior_engineers_df = titles_df.withColumn("status",
+                                            when(col("to_date") == "9999-01-01", "current")
+                                            .otherwise(when(col("to_date") < current_date(), "left")))
+
+# Count how many senior engineers have left and how many are current
+left_count = senior_engineers_df.filter(col("status") == "left").count()
+current_count = senior_engineers_df.filter(col("status") == "current").count()
+print("Number of senior engineers who have left:", left_count)
+print("Number of current senior engineers:", current_count)
+
+# Create a PySpark SQL table of senior engineers who have left the company
+senior_engineers_left_df = senior_engineers_df.filter(col("status") == "left")
+senior_engineers_left_df.createOrReplaceTempView("senior_engineers_left")
+
+# Write DataFrame, DataFrame tempView, and DataFrame to the database
+senior_engineers_left_df.write.format("jdbc") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("dbtable", "left_table") \
+    .option("user", "root") \
+    .option("password", "root") \
+    .mode("overwrite") \
+    .save()
+
+senior_engineers_left_df.createOrReplaceTempView("left_tempview")
+
+senior_engineers_left_df.write.format("jdbc") \
+    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("dbtable", "left_df") \
+    .option("user", "root") \
+    .option("password", "root") \
+    .mode("overwrite") \
+    .save()
+
+# Error if table already exists
+try:
+    senior_engineers_left_df.write.format("jdbc") \
+        .option("url", "jdbc:mysql://localhost:3306/employees") \
+        .option("dbtable", "left_table") \
+        .option("user", "root") \
+        .option("password", "root") \
+        .mode("errorifexists") \
+        .save()
+except Exception as e:
+    print("Error:", e)
+
+
 # Stop the SparkSession
 spark.stop()
