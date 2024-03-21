@@ -9,7 +9,7 @@ spark = SparkSession.builder \
 
 # Read data from the titles table where title is 'Senior Engineer'
 senior_engineers_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("user", "root") \
     .option("password", "root") \
     .option("query", "SELECT * FROM titles WHERE title = 'Senior Engineer'") \
@@ -28,23 +28,23 @@ print("Number of current senior engineers:", current_count)
 
 # Create a PySpark SQL table of just the Senior Engineers information that have left the company
 left_senior_engineers_df = senior_engineers_df.filter(col("status") == "left")
-left_senior_engineers_df.createOrReplaceTempView("left_senior_engineers")
 
-# Write DataFrame as an unmanaged table to the database
 left_senior_engineers_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "left_table_unmanaged") \
     .option("user", "root") \
     .option("password", "root") \
-    .option("path", "/path/to/save/left_table_unmanaged") \
     .mode("overwrite") \
     .save()
 
-# Write DataFrame tempView to the database
-spark.sql("CREATE OR REPLACE TEMPORARY VIEW left_tempview AS SELECT * FROM left_senior_engineers")
-spark.sql("CREATE OR REPLACE TEMPORARY VIEW left_df AS SELECT * FROM left_senior_engineers")
+# Create PySpark SQL tempView of senior engineers who have left the company
+left_senior_engineers_df.createOrReplaceTempView("left_tempview")
 
+# Create PySpark DataFrame of senior engineers who have left the company
+left_df = left_senior_engineers_df
 
+# Show the DataFrame
+left_df.show(10)
 
 # Query the temporary view
 result = spark.sql("SELECT * FROM left_tempview")
@@ -53,7 +53,7 @@ result.show(10)
 # Write DataFrame to the database, setting mode type to 'errorifexists' to generate an error
 try:
     left_senior_engineers_df.write.format("jdbc") \
-        .option("url", "jdbc:mysql://localhost:3306/employees") \
+        .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
         .option("dbtable", "left_table_unmanaged") \
         .option("user", "root") \
         .option("password", "root") \
