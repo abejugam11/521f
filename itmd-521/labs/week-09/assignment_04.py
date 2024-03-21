@@ -8,7 +8,7 @@ spark = SparkSession.builder \
 
 # Read the employees table into a DataFrame
 employees_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "employees") \
     .option("user", "root") \
     .option("password", "root") \
@@ -22,7 +22,7 @@ employees_df.printSchema()
 
 # Create a DataFrame of the top 10,000 employee salaries (sort DESC) from the salaries table
 salaries_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "(SELECT * FROM salaries ORDER BY salary DESC LIMIT 10000) as top_salaries") \
     .option("user", "root") \
     .option("password", "root") \
@@ -30,7 +30,7 @@ salaries_df = spark.read.format("jdbc") \
 
 # Write the DataFrame back to database to a new table called: aces
 salaries_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "aces") \
     .option("user", "root") \
     .option("password", "root") \
@@ -44,7 +44,7 @@ salaries_df.write \
 
 # Read data from the titles table where title is 'Senior Engineer'
 titles_df = spark.read.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("user", "root") \
     .option("password", "root") \
     .option("query", "SELECT * FROM titles WHERE title = 'Senior Engineer'") \
@@ -67,7 +67,7 @@ senior_engineers_left_df.createOrReplaceTempView("senior_engineers_left")
 
 # Write DataFrame, DataFrame tempView, and DataFrame to the database
 senior_engineers_left_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "left_table") \
     .option("user", "root") \
     .option("password", "root") \
@@ -77,7 +77,7 @@ senior_engineers_left_df.write.format("jdbc") \
 senior_engineers_left_df.createOrReplaceTempView("left_tempview")
 
 senior_engineers_left_df.write.format("jdbc") \
-    .option("url", "jdbc:mysql://localhost:3306/employees") \
+    .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
     .option("dbtable", "left_df") \
     .option("user", "root") \
     .option("password", "root") \
@@ -87,7 +87,7 @@ senior_engineers_left_df.write.format("jdbc") \
 # Error if table already exists
 try:
     senior_engineers_left_df.write.format("jdbc") \
-        .option("url", "jdbc:mysql://localhost:3306/employees") \
+        .option("url", "jdbc:mysql://172.17.0.2:3306/employees") \
         .option("dbtable", "left_table") \
         .option("user", "root") \
         .option("password", "root") \
