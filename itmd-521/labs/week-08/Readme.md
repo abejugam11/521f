@@ -63,7 +63,6 @@ Place required screenshot
 
 ### Part II - Screenshot
 
-
 ![py image](<py part3.jpg>)
 ![scala image](<part2_scala.png>)
 
@@ -71,7 +70,7 @@ Place required screenshot
 
 Place screenshot here
 
-## Assignment Details - Part III
+## Assignment Details - Part III 
 
 Using the file: `learning-spark-v2 > flights > departuredelays.csv`
 
