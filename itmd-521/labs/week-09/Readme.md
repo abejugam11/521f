@@ -52,7 +52,7 @@ You will make extensive use of the textbook and these documentation pages -- **a
   - Write each of the three prior options back to the database using the DataFrame Writer (save) function creating a table named: ~~`left-table`~~ `left_table`, ~~`left-tempview`~~ `left_tempview`, and ~~`left-df`~~ `left_df` respectively
 - Repeat the previous command that writes the DataFrame to the database, but set the mode type to `errorifexists` -- take a screenshot of the error message generated and place it here
 
-## Screenshots
+## Screenshots. 
 ![Image](<2.1.png>)
 ![image](<2.2_1.png>)
 
