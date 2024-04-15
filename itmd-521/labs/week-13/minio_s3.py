@@ -24,7 +24,7 @@ conf.set('spark.hadoop.fs.s3a.committer.name','magic')
 # Internal IP for S3 cluster proxy
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://infra-minio-proxy-vm0.service.consul")
 
-spark = SparkSession.builder.appName("JRH convert 50.txt to csv").config('spark.driver.host','127.0.0.1').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("JRH convert 50.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
 
 df = spark.read.csv('s3a://itmd521/50.txt')
 print(df)
