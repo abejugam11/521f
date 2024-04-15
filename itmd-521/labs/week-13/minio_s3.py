@@ -1,25 +1,59 @@
-from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType
-from pyspark.sql.functions import to_date
-
-# Removing hard coded password - using os module to import them
-import os
-import sys
+from pyspark import SparkConf
 
 conf = SparkConf()
-conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.0')
-conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider')
 
-#conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('SECRETKEY'))
-#conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('ACCESSKEY'))
-conf.set('spark.hadoop.fs.s3a.access.key', "spark521")
-conf.set('spark.hadoop.fs.s3a.secret.key', "79a93eda-ba02-11ec-8a4c-54ee75516ff6")
-conf.set("spark.hadoop.fs.s3a.endpoint", "http://10.0.0.50:9000")
+conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.3')
+conf.set('spark.hadoop.fs.s3a.endpoint' , 'http://127.0.0.1:9000')
+conf.set('spark.hadoop.fs.s3a.access.key', 'minioadmin')
+conf.set('spark.hadoop.fs.s3a.secret.key','minioadmin')
+conf.set('spark.hadoop.fs.s3a.path.style.access','true')
+conf.set('spark.hadoop.fs.s3a.ssl.enabled','false')
+conf.set('spark.hadoop.fs.s3a.aws.credentials.provider','org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+conf.set('spark.hadoop.fs.s3a.impl', 'org.apache.hadoop.fs.s3a.S3AFileSystem')
+conf.set('spark.hadoop.fs.s3a.committer.magic.enabled','true')
+conf.set('spark.hadoop.fs.s3a.committer.name','magic')
 
-#spark = SparkSession.builder.appName("JRH insert 30 to mysql").config('spark.driver.host','192.168.172.45').config(conf=conf).getOrCreate()
-spark = SparkSession.builder.appName("abhi test").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
-df = spark.read.csv('s3a://itmd521/60.txt')
-print('df', df)
+spark = SparkSession.builder.config(conf=conf).getOrCreate()
+
+# This is a basic read of an object stored on the configured S3 target
+# It loads a csv file from the 'spark' bucket with the specified prefix and path
+
+df = spark \
+          .read \
+          .option('header','true') \
+          .csv('s3a://spark/yellow_tripdata_2021-01.csv')
+
+df.createOrReplaceTempView("TAXI")
+
+print("Number of rows: " + str(df.count()))
+
+res = spark.sql("""
+           SELECT
+           tpep_pickup_datetime,
+           tpep_dropoff_datetime,
+           passenger_count,
+           trip_distance,
+           case
+               when payment_type = '1' then 'Credit'
+               when payment_type = '2' then 'Cash'
+               when payment_type = '3' then 'No Charge'
+               when payment_type = '4' then 'Dispute'
+               when payment_type = '5' then 'Unknown'
+               when payment_type = '6' then 'Void'
+           end as payment_type,
+           tip_amount,
+           total_amount
+           FROM TAXI
+        """)
+
+res.show()
+
+res \
+    .coalesce(1) \
+    .write.mode('overwrite') \
+    .option('header','true') \
+    .csv('s3a://spark-job-output/processed-taxi-data.csv')
+
 
