@@ -24,7 +24,7 @@ conf.set('spark.hadoop.fs.s3a.committer.name','magic')
 # Internal IP for S3 cluster proxy
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://infra-minio-proxy-vm0.service.consul")
 
-spark = SparkSession.builder.appName("JRH convert 50.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("abejugam convert 60.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
 
 df = spark.read.csv('s3a://itmd521/60.txt')
 
@@ -48,10 +48,9 @@ splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
 .withColumn('AtmosphericPressure', df['_c0'].substr(100, 5).cast('float')/ 10) \
 .withColumn('APQualityCode', df['_c0'].substr(105, 1).cast(IntegerType())).drop('_c0')
 
+writeDF = splitDF.coalesce(1)
 splitDF.printSchema()
 splitDF.show(5)
 
-##############################################################################
-# Replace jhajek with your own HAWKID, which is your bucket name
-##############################################################################
-splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
+writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/csv")
+splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/parquet")
