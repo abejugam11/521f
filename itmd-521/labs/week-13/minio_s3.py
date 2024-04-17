@@ -11,13 +11,8 @@ conf = SparkConf()
 conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.0')
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
 
-#conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('ACCESSKEY'))
-#conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('SECRETKEY'))
-
-conf.set('spark.hadoop.fs.s3a.access.key', 'abejugam')
-conf.set('spark.hadoop.fs.s3a.secret.key', '54245376-eb0a-11ee-bc4b-33c9b67a91fd')
-
-
+conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('ACCESSKEY'))
+conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('SECRETKEY'))
 # Configure these settings
 # https://medium.com/@dineshvarma.guduru/reading-and-writing-data-from-to-minio-using-spark-8371aefa96d2
 conf.set("spark.hadoop.fs.s3a.path.style.access", "true")
@@ -29,11 +24,9 @@ conf.set('spark.hadoop.fs.s3a.committer.name','magic')
 # Internal IP for S3 cluster proxy
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://infra-minio-proxy-vm0.service.consul")
 
-spark = SparkSession.builder.appName("JRH convert 60.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("JRH convert 50.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
 
 df = spark.read.csv('s3a://itmd521/60.txt')
-
-
 
 splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
 .withColumn('WBAN', df['_c0'].substr(11, 5)) \
