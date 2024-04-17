@@ -15,6 +15,10 @@ conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s
 #conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('ACCESSKEY'))
 conf.set('spark.hadoop.fs.s3a.access.key', "spark521")
 conf.set('spark.hadoop.fs.s3a.secret.key', "79a93eda-ba02-11ec-8a4c-54ee75516ff6")
+
+conf.set('spark.hadoop.fs.s3a.committer.magic.enabled','true')
+conf.set('spark.hadoop.fs.s3a.committer.name','magic')
+
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://10.0.2.15:9000")
 
 #spark = SparkSession.builder.appName("JRH insert 30 to mysql").config('spark.driver.host','192.168.172.45').config(conf=conf).getOrCreate()
