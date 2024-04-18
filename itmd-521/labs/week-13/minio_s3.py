@@ -69,16 +69,22 @@ writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a:
 
 csv_df=spark.read.csv('s3a://abejugam/60-uncompressed.csv')
 
-average_temp = csv_df.groupBy(year("Date").alias("Year"), month("Date").alias("Month")).agg(avg("Temperature").alias("AverageTemperature"))
+# Filter the data for the year 1961
+df_1961 = csv_df.filter(year(df['ObservationDate']) == 1961)
 
-# Write results to Parquet file
-average_temp.write.mode("overwrite").parquet("s3a://abejugam/part-three.parquet")
+# Extract the month and year from the date column
+df_1961 = df_1961.withColumn('month', month(df_1961['ObservationDate']))
+df_1961 = df_1961.withColumn('year', year(df_1961['ObservationDate']))
 
-# Take only the first year of the decade (12 records) for CSV export
-first_year_data = average_temp.filter("Year == 1961").limit(12)
+# Calculate the average temperature for each month in the year 1961
+average_temp_df = df_1961.groupBy('year', 'month').agg(avg('AirTemperature').alias('average_temperature'))
 
-# Write first year data to CSV file
-first_year_data.write.mode("overwrite").csv("s3a://abejugam/part-three.csv", header=True)
+# Write the results to a Parquet file
+average_temp_df.write.parquet("s3a://abejugam/part-three.parquet", mode="overwrite")
 
-# Stop SparkSession
+# Take only the first year's data (12 records)
+first_year_df = df_1961.limit(12)
+
+# Write the first year's data to a CSV file
+first_year_df.write.csv("s3a://abejugam/part-three.csv", header=True, mode="overwrite")
 spark.stop()
