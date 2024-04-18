@@ -1,7 +1,7 @@
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType
-from pyspark.sql.functions import to_date
+from pyspark.sql.functions import to_date,year, month, avg
 
 # Removing hard coded password - using os module to import them
 import os
@@ -56,7 +56,7 @@ splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a:
 
 splitDF.write.format("csv").mode("overwrite").option("header","true").option("compression","lz4").save("s3a://abejugam/60-compressed.csv")
 
-splitDF.write.format("csv").coalesce(1).mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
+writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
 
 
 splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/60.parquet")
