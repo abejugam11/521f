@@ -23,8 +23,6 @@ conf.set('spark.hadoop.fs.s3a.committer.magic.enabled','true')
 conf.set('spark.hadoop.fs.s3a.committer.name','magic')
 # Internal IP for S3 cluster proxy
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://infra-minio-proxy-vm0.service.consul")
-conf.set("spark.network.timeout", "10000")
-conf.set("spark.executor.heartbeatInterval", "1000")
 
 spark = SparkSession.builder.appName("abejugam convert 60.txt to csv").config('spark.driver.host','spark-edge.service.consul').config(conf=conf).getOrCreate()
 
@@ -54,5 +52,11 @@ writeDF = splitDF.coalesce(1)
 splitDF.printSchema()
 splitDF.show(5)
 
-writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/csv")
-splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/parquet")
+splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60-uncompressed.csv")
+
+splitDF.write.format("csv").mode("overwrite").option("header","true").option("compression","lz4").save("s3a://abejugam/60-compressed.csv")
+
+splitDF.write.format("csv").coalesce(1).mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
+
+
+splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/60.parquet")
