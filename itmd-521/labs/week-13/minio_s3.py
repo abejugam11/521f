@@ -60,3 +60,22 @@ splitDF.write.format("csv").coalesce(1).mode("overwrite").option("header","true"
 
 
 splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/60.parquet")
+
+
+#part 2
+
+csv_df=spark.read.csv('s3a://abejugam/60-uncompressed.csv')
+
+average_temp = csv_df.groupBy(year("Date").alias("Year"), month("Date").alias("Month")).agg(avg("Temperature").alias("AverageTemperature"))
+
+# Write results to Parquet file
+average_temp.write.mode("overwrite").parquet("s3a://abejugam/part-three.parquet")
+
+# Take only the first year of the decade (12 records) for CSV export
+first_year_data = average_temp.filter("Year == 1961").limit(12)
+
+# Write first year data to CSV file
+first_year_data.write.mode("overwrite").csv("s3a://abejugam/part-three.csv", header=True)
+
+# Stop SparkSession
+spark.stop()
