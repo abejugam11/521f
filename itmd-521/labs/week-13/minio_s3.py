@@ -68,26 +68,21 @@ colesce_df = writeDF.coalesce(1)
 # Writing the coalesced DataFrame to a single CSV file
 colesce_df.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
 
-# Reading the original CSV data for further processing
-csv_df=spark.read.csv('s3a://itmd521/60.txt')
+# Convert the 'ObservationDate' column to a date type
+writeDF = writeDF.withColumn("ObservationDate", writeDF["ObservationDate"].cast("Date"))
 
-# Filtering the data for the year 1961
-df_1961 = csv_df.filter(year(csv_df['ObservationDate']) == 1961)
+# Extract the year and month from the 'ObservationDate' column
+writeDF = writeDF.withColumn("Year", year(writeDF["ObservationDate"]))
+writeDF = writeDF.withColumn("Month", month(writeDF["ObservationDate"]))
 
-# Extracting the month and year from the date column
-df_1961 = df_1961.withColumn('month', month(df_1961['ObservationDate']))
-df_1961 = df_1961.withColumn('year', year(df_1961['ObservationDate']))
+# Calculate the average temperature per month per year
+average_temp_df = writeDF.groupBy("Year", "Month").agg(avg("AirTemperature").alias("AverageTemperature"))
 
-# Calculating the average temperature for each month in the year 1961
-average_temp_df = df_1961.groupBy('year', 'month').agg(avg('AirTemperature').alias('average_temperature'))
+# Write the results to a Parquet file
+average_temp_df.write.parquet("s3a://abejugam/part-three.parquet", mode="overwrite")
 
-# Writing the results to a Parquet file
-average_temp_df.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/part-three.parquet")
-
-# Taking only the first year's data (12 records)
-first_year_df = df_1961.limit(12)
-
-# Writing the first year's data to a CSV file
-first_year_df.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/part-three.csv")
+# Take only the first year's data (12 records) and write this to a CSV file
+first_year_df = average_temp_df.filter(writeDF["Year"] == 1961).limit(12)
+first_year_df.write.csv("s3a://abejugam/part-three.csv", header=True, mode="overwrite")
 
 spark.stop()
