@@ -51,17 +51,39 @@ splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
 .withColumn('APQualityCode', df['_c0'].substr(105, 1).cast(IntegerType())).drop('_c0')
 
 writeDF = splitDF.coalesce(1)
-# splitDF.printSchema()
-# splitDF.show(5)
 
-# splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60-uncompressed.csv")
+splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60-uncompressed.csv")
 
-# splitDF.write.format("csv").mode("overwrite").option("header","true").option("compression","lz4").save("s3a://abejugam/60-compressed.csv")
+splitDF.write.format("csv").mode("overwrite").option("header","true").option("compression","lz4").save("s3a://abejugam/60-compressed.csv")
 
 splitDF.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/60.parquet")
 
 writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/60.csv")
 
 
+
+
+# #part 2
+
+csv_df=spark.read.csv('s3a://itmd521/60.txt')
+
+# # Filter the data for the year 1961
+df_1961 = csv_df.filter(year(csv_df['ObservationDate']) == 1961)
+
+# # Extracting the month and year from the date column
+df_1961 = df_1961.withColumn('month', month(df_1961['ObservationDate']))
+df_1961 = df_1961.withColumn('year', year(df_1961['ObservationDate']))
+
+# # Calculating the average temperature for each month in the year 1961
+average_temp_df = df_1961.groupBy('year', 'month').agg(avg('AirTemperature').alias('average_temperature'))
+
+# # Writing the results to a Parquet file
+average_temp_df.write.format("parquet").mode("overwrite").option("header","true").save("s3a://abejugam/part-three.parquet")
+
+# # Taking only the first year's data (12 records)
+first_year_df = df_1961.limit(12)
+
+# # Writing the first year's data to a CSV file
+first_year_df.write.format("csv").mode("overwrite").option("header","true").save("s3a://abejugam/part-three.csv")
 
 spark.stop()
